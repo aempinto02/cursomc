@@ -1,5 +1,6 @@
 package com.ston.cursomc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.ston.cursomc.domain.Cidade;
 import com.ston.cursomc.domain.Cliente;
 import com.ston.cursomc.domain.Endereco;
 import com.ston.cursomc.domain.Estado;
+import com.ston.cursomc.domain.Pagamento;
+import com.ston.cursomc.domain.PagamentoComBoleto;
+import com.ston.cursomc.domain.PagamentoComCartao;
+import com.ston.cursomc.domain.Pedido;
 import com.ston.cursomc.domain.Produto;
+import com.ston.cursomc.domain.enums.EstadoPagamento;
 import com.ston.cursomc.domain.enums.TipoCliente;
 import com.ston.cursomc.repositories.CategoriaRepository;
 import com.ston.cursomc.repositories.CidadeRepository;
 import com.ston.cursomc.repositories.ClienteRepository;
 import com.ston.cursomc.repositories.EnderecoRepository;
 import com.ston.cursomc.repositories.EstadoRepository;
+import com.ston.cursomc.repositories.PagamentoRepository;
+import com.ston.cursomc.repositories.PedidoRepository;
 import com.ston.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -41,6 +49,12 @@ public class CursomcApplication implements CommandLineRunner {
 	
 	@Autowired
 	private EnderecoRepository endRepository;
+
+	@Autowired
+	private PedidoRepository pedRepository;
+	
+	@Autowired
+	private PagamentoRepository pagRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -81,12 +95,27 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+		
+		Pagamento pag1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pag1);
+
+		Pagamento pag2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pag2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
 		repository.saveAll(Arrays.asList(cat1, cat2));
 		prodRepository.saveAll(Arrays.asList(p1, p2, p3));
 		estRepository.saveAll(Arrays.asList(est1, est2));
 		cidRepository.saveAll(Arrays.asList(c1, c2, c3));
 		cliRepository.saveAll(Arrays.asList(cli1));
 		endRepository.saveAll(Arrays.asList(e1, e2));
+		pedRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagRepository.saveAll(Arrays.asList(pag1, pag2));
 	}
 
 }
