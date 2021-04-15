@@ -117,10 +117,8 @@ public class DBService {
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2, c3));
 		
-		String senha1 = pe.encode("123");
-		Cliente cli1 = new Cliente(null, "Maria Silva", "aempinto02@icloud.com", "93281654782", TipoCliente.PESSOAFISICA, senha1);
-		String senha = pe.encode("123");
-		Cliente cli2 = new Cliente(null, "Ana Costa", "aempinto02@gmail.com", "93281654782", TipoCliente.PESSOAFISICA, senha);
+		Cliente cli1 = new Cliente(null, "Maria Silva", "aempinto02@icloud.com", "93281654782", TipoCliente.PESSOAFISICA, pe.encode("123"));
+		Cliente cli2 = new Cliente(null, "Ana Costa", "aempinto02@gmail.com", "93281654782", TipoCliente.PESSOAFISICA, pe.encode("123"));
 		
 		cli2.addPerfil(Perfil.ADMIN);
 		
