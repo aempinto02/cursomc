@@ -78,7 +78,8 @@ public class ClienteService {
 	}
 	
 	public Cliente fromDTO(ClienteNewDTO clienteDto) {
-		Cliente cliente = new Cliente(null, clienteDto.getNome(), clienteDto.getEmail(), clienteDto.getCpfOuCnpj(), TipoCliente.toEnum(clienteDto.getTipo()), pe.encode(clienteDto.getSenha()));
+		String senha0 = pe.encode(clienteDto.getSenha());
+		Cliente cliente = new Cliente(null, clienteDto.getNome(), clienteDto.getEmail(), clienteDto.getCpfOuCnpj(), TipoCliente.toEnum(clienteDto.getTipo()), senha0);
 		Cidade cidade = new Cidade(clienteDto.getCidadeId(), null, null);
 		Endereco end = new Endereco(null, clienteDto.getLogradouro(), clienteDto.getNumero(), clienteDto.getComplemento(), clienteDto.getBairro(), clienteDto.getCep(), cliente, cidade);
 		cliente.getEnderecos().add(end);
